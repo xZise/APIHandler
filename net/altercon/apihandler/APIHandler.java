@@ -37,13 +37,13 @@ public class APIHandler extends JavaPlugin {
 
     public void onEnable() {
         PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+        log.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 
         pluginName = pdfFile.getName();
     }
 
     public void onDisable() {
-        System.out.println(pluginName + ": Goodbye world!");
+    	log.info(pluginName + ": Goodbye world!");
     }
 
     public boolean isDebugging(final Player player) {
