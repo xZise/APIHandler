@@ -7,6 +7,9 @@ import net.altercon.apihandler.apis.APIs;
 import net.altercon.apihandler.apis.currency.CurrencyAPI;
 import net.altercon.apihandler.apis.currency.CurrencyInterface;
 import net.altercon.apihandler.apis.currency.NoCurrencyPluginException;
+import net.altercon.apihandler.apis.helper.HelperAPI;
+import net.altercon.apihandler.apis.helper.HelperInterface;
+import net.altercon.apihandler.apis.helper.NoHelperPluginException;
 import net.altercon.apihandler.apis.permissions.NoPermissionPluginException;
 import net.altercon.apihandler.apis.permissions.PermissionsAPI;
 import net.altercon.apihandler.apis.permissions.PermissionsInterface;
@@ -17,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.PluginManager;
 
 /**
  * This Plugin does API handling.
@@ -43,6 +45,11 @@ public class APIHandler extends JavaPlugin {
      */
     private PermissionsAPI permissionsAPI = new PermissionsAPI();
     private boolean isPermissionsLoaded = false;
+    /**
+     * The respective HelperAPI
+     */
+    private HelperAPI helperAPI = new HelperAPI();
+    private boolean isHelperLoaded = false;
 
     public void onEnable() {
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -105,6 +112,23 @@ public class APIHandler extends JavaPlugin {
         }
         return currencyAPI;
     }
+    
+    /**
+     * Getter for the HelperAPI.
+     * @return The CurrencyAPI holding all the client plugins as listeners.
+     * @throws NoCurrencyPluginException When the CurrencyAPI is requested
+     * while there is no Currency plugin installed.
+     */
+    public HelperAPI getHelperAPI() throws NoHelperPluginException {
+        if (!isHelperLoaded) {
+            registerPlugins(APIs.Helper);
+            isHelperLoaded = true;
+        }
+        if (!helperAPI.isRegistered()) {
+            throw new NoHelperPluginException();
+        }
+        return helperAPI;
+    }
 
     /**
      * Registers plugins to their respective Category API
@@ -124,6 +148,13 @@ public class APIHandler extends JavaPlugin {
                 for (Plugin p : getServer().getPluginManager().getPlugins()) {
                     if (PermissionsInterface.class.isInstance(p)) {
                         permissionsAPI.registerPlugin((PermissionsInterface) p);
+                    }
+                }
+                break;
+            case Helper:
+        	for (Plugin p : getServer().getPluginManager().getPlugins()) {
+                    if (HelperInterface.class.isInstance(p)) {
+                        helperAPI.registerPlugin((HelperInterface) p);
                     }
                 }
                 break;

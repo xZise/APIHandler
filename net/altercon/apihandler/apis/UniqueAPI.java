@@ -20,5 +20,4 @@ public class UniqueAPI<E> implements GenericAPI<E> {
 	public boolean isRegistered() {
 		return this.plugin != null;
 	}
-
 }

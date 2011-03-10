@@ -6,5 +6,5 @@ package net.altercon.apihandler.apis;
  */
 public enum APIs {
 
-    Currency, Permissions
+    Currency, Permissions, Helper
 }
