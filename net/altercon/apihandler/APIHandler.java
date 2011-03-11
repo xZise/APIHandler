@@ -8,6 +8,7 @@ import net.altercon.apihandler.apis.currency.CurrencyAPI;
 import net.altercon.apihandler.apis.currency.CurrencyInterface;
 import net.altercon.apihandler.apis.currency.NoCurrencyPluginException;
 import net.altercon.apihandler.apis.permissions.NoPermissionPluginException;
+import net.altercon.apihandler.apis.permissions.PermissionPluginAdapter;
 import net.altercon.apihandler.apis.permissions.PermissionsAPI;
 import net.altercon.apihandler.apis.permissions.PermissionsInterface;
 
@@ -18,6 +19,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
+
+import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
  * This Plugin does API handling.
@@ -124,6 +127,10 @@ public class APIHandler extends JavaPlugin {
                 for (Plugin p : getServer().getPluginManager().getPlugins()) {
                     if (PermissionsInterface.class.isInstance(p)) {
                         permissionsAPI.registerPlugin((PermissionsInterface) p);
+                    }
+                    if (p instanceof Permissions) {
+                	//TODO: What is if the plugin is not enabled?
+                	permissionsAPI.registerPlugin(new PermissionPluginAdapter((Permissions) p, this.getServer()));
                     }
                 }
                 break;
