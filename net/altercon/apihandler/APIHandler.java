@@ -7,10 +7,12 @@ import net.altercon.apihandler.apis.APIs;
 import net.altercon.apihandler.apis.currency.CurrencyAPI;
 import net.altercon.apihandler.apis.currency.CurrencyInterface;
 import net.altercon.apihandler.apis.currency.NoCurrencyPluginException;
+import net.altercon.apihandler.apis.permissions.GroupManagerPluginAdapter;
 import net.altercon.apihandler.apis.permissions.NoPermissionPluginException;
 import net.altercon.apihandler.apis.permissions.PermissionsAPI;
 import net.altercon.apihandler.apis.permissions.PermissionsInterface;
 
+import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -124,6 +126,9 @@ public class APIHandler extends JavaPlugin {
                 for (Plugin p : getServer().getPluginManager().getPlugins()) {
                     if (PermissionsInterface.class.isInstance(p)) {
                         permissionsAPI.registerPlugin((PermissionsInterface) p);
+                    }
+                    if (p instanceof GroupManager) {
+                	permissionsAPI.registerPlugin(new GroupManagerPluginAdapter((GroupManager) p));
                     }
                 }
                 break;
