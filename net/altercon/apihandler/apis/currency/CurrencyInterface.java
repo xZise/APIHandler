@@ -1,11 +1,13 @@
 
 package net.altercon.apihandler.apis.currency;
 
+import net.altercon.apihandler.apis.APIInterface;
+
 /**
  * Defines the standard methods that a Currency plugin should have.
  * @author Isabaellchen
  */
-public interface CurrencyInterface {
+public interface CurrencyInterface extends APIInterface {
 
     /**
      * Checks the current balance of a player.

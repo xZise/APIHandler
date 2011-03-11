@@ -3,7 +3,9 @@ package net.altercon.apihandler;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import net.altercon.apihandler.apis.APIInterface;
 import net.altercon.apihandler.apis.APIs;
+import net.altercon.apihandler.apis.InterfaceOwner;
 import net.altercon.apihandler.apis.currency.CurrencyAPI;
 import net.altercon.apihandler.apis.currency.CurrencyInterface;
 import net.altercon.apihandler.apis.currency.NoCurrencyPluginException;
@@ -118,6 +120,9 @@ public class APIHandler extends JavaPlugin {
                     if (CurrencyInterface.class.isInstance(p)) {
                         currencyAPI.registerPlugin((CurrencyInterface) p);
                     }
+                    if (p instanceof InterfaceOwner) {
+                	this.registerPlugin((InterfaceOwner) p, api);
+                    }
                 }
                 break;
             case Permissions:
@@ -125,8 +130,31 @@ public class APIHandler extends JavaPlugin {
                     if (PermissionsInterface.class.isInstance(p)) {
                         permissionsAPI.registerPlugin((PermissionsInterface) p);
                     }
+                    if (p instanceof InterfaceOwner) {
+                	this.registerPlugin((InterfaceOwner) p, api);
+                    }
                 }
                 break;
         }
+    }
+    
+    public void registerPlugin(InterfaceOwner owner, APIs api) {
+	APIInterface[] interfaces = owner.getInterfaces();
+	switch (api) {
+        case Currency:
+            for (APIInterface apiInterface : interfaces) {
+		if (apiInterface instanceof CurrencyInterface) {
+		    currencyAPI.registerPlugin((CurrencyInterface) apiInterface);
+		}
+	    }
+            break;
+        case Permissions:
+            for (APIInterface apiInterface : interfaces) {
+		if (apiInterface instanceof PermissionsInterface) {
+		    permissionsAPI.registerPlugin((PermissionsInterface) apiInterface);
+		}
+	    }
+            break;
+    }
     }
 }
